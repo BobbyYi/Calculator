@@ -1,1 +1,178 @@
-:D
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scientific Calculator</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      margin: 50px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    #calculator {
+      width: 300px;
+      margin: auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 48px;
+      height: 48px;
+      font-size: 16px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #eee;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #dddddd;
+    }
+
+    #result {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Scientific Calculator</h2>
+
+  <div id="calculator">
+    <input type="text" id="expression" readonly>
+
+    <br>
+
+    <button onclick="clearExpression()">C</button>
+    <button onclick="backspace()">←</button>
+    <button onclick="appendToExpression('(')">(</button>
+    <button onclick="appendToExpression(')')">)</button>
+
+    <br>
+
+    <!-- Buttons for digits and operators -->
+    <div id="digit-buttons">
+      <button onclick="appendToExpression('7')">7</button>
+      <button onclick="appendToExpression('8')">8</button>
+      <button onclick="appendToExpression('9')">9</button>
+      <button onclick="appendToExpression('/')">/</button>
+
+      <button onclick="appendToExpression('4')">4</button>
+      <button onclick="appendToExpression('5')">5</button>
+      <button onclick="appendToExpression('6')">6</button>
+      <button onclick="appendToExpression('*')">*</button>
+
+      <button onclick="appendToExpression('1')">1</button>
+      <button onclick="appendToExpression('2')">2</button>
+      <button onclick="appendToExpression('3')">3</button>
+      <button onclick="appendToExpression('-')">-</button>
+
+      <button onclick="appendToExpression('0')">0</button>
+      <button onclick="appendToExpression('.')">.</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="appendToExpression('+')">+</button>
+    </div>
+
+    <br>
+
+    <!-- Buttons for scientific functions -->
+    <div id="scientific-buttons">
+      <button onclick="appendToExpression('Math.sqrt(')">√</button>
+      <button onclick="appendToExpression('Math.cbrt(')">∛</button>
+      <button onclick="power()">^</button>
+      <button onclick="sine()">sin</button>
+      <button onclick="cosine()">cos</button>
+      <button onclick="tangent()">tan</button>
+      <button onclick="cotangent()">cotan</button>
+    </div>
+
+    <br><br>
+
+    <p id="result">Result: </p>
+  </div>
+
+  <script>
+    function appendToExpression(value) {
+      document.getElementById("expression").value += value;
+    }
+
+    function clearExpression() {
+      document.getElementById("expression").value = "";
+      updateResult("");
+    }
+
+    function backspace() {
+      let currentExpression = document.getElementById("expression").value;
+      document.getElementById("expression").value = currentExpression.slice(0, -1);
+      updateResult("");
+    }
+
+    function calculate() {
+      try {
+        let result = eval(document.getElementById("expression").value);
+        updateResult(result);
+      } catch (error) {
+        updateResult("Error");
+      }
+    }
+
+    function power() {
+      appendToExpression("**");
+    }
+
+    function sine() {
+      appendToExpression("Math.sin(");
+    }
+
+    function cosine() {
+      appendToExpression("Math.cos(");
+    }
+
+    function tangent() {
+      appendToExpression("Math.tan(");
+    }
+
+    function cotangent() {
+      appendToExpression("1/Math.tan(");
+    }
+
+    function updateResult(value) {
+      const resultElement = document.getElementById("result");
+      
+      // Check if the result is a fraction (contains '/')
+      if (value.toString().includes('/')) {
+        const [numerator, denominator] = value.toString().split('/');
+        resultElement.innerHTML = `Result: <sup>${numerator}</sup>/<sub>${denominator}</sub>`;
+      } else {
+        resultElement.innerHTML = `Result: ${parseFloat(value).toFixed(9)}`;
+      }
+    }
+  </script>
+
+</body>
+</html>
